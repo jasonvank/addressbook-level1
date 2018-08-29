@@ -116,6 +116,10 @@ public class AddressBook {
     private static final String COMMAND_FIND_PARAMETERS = "KEYWORD [MORE_KEYWORDS]";
     private static final String COMMAND_FIND_EXAMPLE = COMMAND_FIND_WORD + " alice bob charlie";
 
+    private static final String COMMAND_SORT_WORD = "sort";
+    private static final String COMMAND_SORT_DESC = "Sort the list of persons ";
+    private static final String COMMAND_SORT_EXAMPLE = "sort";
+
     private static final String COMMAND_LIST_WORD = "list";
     private static final String COMMAND_LIST_DESC = "Displays all persons as a list with index numbers.";
     private static final String COMMAND_LIST_EXAMPLE = COMMAND_LIST_WORD;
@@ -376,6 +380,8 @@ public class AddressBook {
                 return executeAddPerson(commandArgs);
             case COMMAND_FIND_WORD:
                 return executeFindPersons(commandArgs);
+            case COMMAND_SORT_WORD:
+                return executeSortPersonsList(commandArgs);
             case COMMAND_LIST_WORD:
                 return executeListAllPersonsInAddressBook();
             case COMMAND_DELETE_WORD:
@@ -450,6 +456,14 @@ public class AddressBook {
             getNameFromPerson(addedPerson), getPhoneFromPerson(addedPerson),
             getEmailFromPerson(addedPerson));
     }
+
+    private static String executeSortPersonsList(String commandArgs) {
+//        ArrayList<HashMap<PersonProperty, String>> toBeDisplayed = getAllPersonsInAddressBook();
+        ALL_PERSONS.sort((s1,  s2)-> getNameFromPerson(s1).compareToIgnoreCase(getNameFromPerson(s2)));
+        return executeListAllPersonsInAddressBook();
+    }
+
+
 
     /**
      * Finds and lists all persons in address book whose name contains any of the argument keywords.
@@ -593,6 +607,7 @@ public class AddressBook {
      */
     private static String executeListAllPersonsInAddressBook() {
         ArrayList<HashMap<PersonProperty, String>> toBeDisplayed = getAllPersonsInAddressBook();
+//        toBeDisplayed.sort((s1,  s2)-> getNameFromPerson(s1).compareToIgnoreCase(getNameFromPerson(s2)));
         showToUser(toBeDisplayed);
         return getMessageForPersonsDisplayedSummary(toBeDisplayed);
     }
@@ -1120,6 +1135,7 @@ public class AddressBook {
     private static String getUsageInfoForAllCommands() {
         return getUsageInfoForAddCommand() + LS
             + getUsageInfoForFindCommand() + LS
+            + getUsageInfoForSortCommand() + LS
             + getUsageInfoForViewCommand() + LS
             + getUsageInfoForDeleteCommand() + LS
             + getUsageInfoForClearCommand() + LS
@@ -1143,6 +1159,14 @@ public class AddressBook {
         return String.format(MESSAGE_COMMAND_HELP, COMMAND_FIND_WORD, COMMAND_FIND_DESC) + LS
             + String.format(MESSAGE_COMMAND_HELP_PARAMETERS, COMMAND_FIND_PARAMETERS) + LS
             + String.format(MESSAGE_COMMAND_HELP_EXAMPLE, COMMAND_FIND_EXAMPLE) + LS;
+    }
+
+    /**
+     * Returns the string for showing 'find' command usage instruction
+     */
+    private static String getUsageInfoForSortCommand() {
+        return String.format(MESSAGE_COMMAND_HELP, COMMAND_SORT_WORD, COMMAND_SORT_DESC) + LS
+            + String.format(MESSAGE_COMMAND_HELP_EXAMPLE, COMMAND_SORT_EXAMPLE) + LS;
     }
 
     /**
